@@ -1,5 +1,4 @@
 import test from "ava";
-import e from "express";
 import {
   createEmployee,
   deleteEmployee,
@@ -54,7 +53,6 @@ test.serial("Updating employee test", async (t) => {
 }); //-<
 
 test.serial("Deleting employee teste", async (t) => {
-  let employeeToDelete = {};
   const response = await deleteEmployee(String(createdEmployee._id));
   t.assert(response, "The employee should have been deleted");
 });
