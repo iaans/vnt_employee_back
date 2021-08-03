@@ -1,6 +1,6 @@
 import { Employee } from "../models/index.js";
 
-export async function createEmployee({
+export function createEmployee({
   name,
   birthDate,
   gender,
@@ -9,7 +9,7 @@ export async function createEmployee({
   role,
   salary,
 }) {
-  await Employee.create({
+  return Employee.create({
     name,
     birthDate,
     gender,
@@ -30,7 +30,7 @@ export function updateEmployee(employee) {
 
     // employee[prop] para verificar se tem algum valor
 
-    if (employee[prop] && prop !== "id") {
+    if (employee[prop] && prop !== "_id") {
       updateObj[prop] = employee[prop];
     }
   });
@@ -40,7 +40,7 @@ export function updateEmployee(employee) {
   // employee.name
   // employee['name']
 
-  return Employee.findByIdAndUpdate(employee.id, updateObj).orFail(() => {
+  return Employee.findByIdAndUpdate(employee._id, updateObj).orFail(() => {
     throw new Error("Failed to update the Employee");
   });
 }
