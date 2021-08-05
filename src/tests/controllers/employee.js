@@ -44,7 +44,7 @@ test.serial("Updating employee test", async (t) => {
   let employeeToUpdate = {};
 
   employeeToUpdate._id = String(createdEmployee._id);
-  employeeToUpdate.name = "Maria";
+  employeeToUpdate.name = "José";
   employeeToUpdate.city = "Antonina";
   employeeToUpdate.state = "PR";
 
