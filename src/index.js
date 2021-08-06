@@ -24,3 +24,8 @@ await connect();
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
+
+process.on("unhandledRejection", (err) => {
+  console.log(err);
+  throw new Error("Ocorreu um erro na execução do servidor");
+});
