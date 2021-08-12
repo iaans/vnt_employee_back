@@ -5,6 +5,7 @@ import {
   listAllEmployees,
   updateEmployee,
 } from "./controllers/employee.js";
+import { listAllUf } from "./controllers/uf.js";
 
 const app = express.Router();
 
@@ -19,11 +20,16 @@ app.get("/list-employees", async (req, res) => {
   res.send(await listAllEmployees());
 });
 
+app.get("/list-ufs", async (req, res) => {
+  res.send(await listAllUf());
+});
+
 // app.get()
 
 app.post("/submit-employee", async (req, res) => {
   const { name, birthDate, gender, state, city, role, salary } = req.body;
 
+  console.log("nomjksdgjksdkjfhfsdkgh ");
   console.log(name, birthDate, gender, state, city, role, salary);
 
   await createEmployee({ name, birthDate, gender, state, city, role, salary });
