@@ -24,6 +24,10 @@ app.get("/list-ufs", async (req, res) => {
   res.send(await listAllUf());
 });
 
+app.get("/get-cities-by-state/:uf", async (req, res) => {
+  res.send(await listAllCitiesByUf(req.params.uf));
+});
+
 // app.get()
 
 app.post("/submit-employee", async (req, res) => {
