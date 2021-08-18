@@ -1,4 +1,5 @@
 import express from "express";
+import { listAllCitiesByUf } from "./controllers/city.js";
 import {
   createEmployee,
   deleteEmployee,
@@ -32,8 +33,6 @@ app.get("/get-cities-by-state/:uf", async (req, res) => {
 
 app.post("/submit-employee", async (req, res) => {
   const { name, birthDate, gender, state, city, role, salary } = req.body;
-
-  console.log("nomjksdgjksdkjfhfsdkgh ");
   console.log(name, birthDate, gender, state, city, role, salary);
 
   await createEmployee({ name, birthDate, gender, state, city, role, salary });
