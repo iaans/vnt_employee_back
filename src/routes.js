@@ -29,12 +29,14 @@ app.get("/list-ufs", async (req, res) => {
 // do
 app.get(
   "/get-cities-by-state/:uf",
-  param("uf").isString().trim().notEmpty().withMessage("State cannot be empty"),
+  param("uf", "State cannot be empty").isString().trim().notEmpty(),
   async (req, res) => {
     //validando
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res
+        .status(400)
+        .json({ errors: errors.array({ onlyFirstError: true }) });
     }
     res.send(await listAllCitiesByUf(req.params.uf));
   }
@@ -45,37 +47,33 @@ app.get(
 app.post(
   "/submit-employee",
   //montando a regra para validação
-  body("name").isString().trim().notEmpty().withMessage("Name cannot be empty"),
-  body("birthDate")
+  body("name", "Name cannot be empty").isString().trim().notEmpty(),
+  body("birthDate", "Birthdate cannot be empty")
     .isISO8601()
     .toDate()
-    .notEmpty()
-    .withMessage("Birthdate cannot be empty"),
-  body("gender")
+    .notEmpty(),
+  body("gender", "Gender cannot be empty").isString().trim().notEmpty(),
+  body("state", "State cannot be empty").isString().trim().notEmpty(),
+  body("city", "City cannot be empty")
     .isString()
     .trim()
     .notEmpty()
-    .withMessage("Gender cannot be empty"),
-  body("state")
-    .isString()
-    .trim()
-    .notEmpty()
-    .withMessage("State cannot be empty"),
-  body("city").isString().trim().notEmpty().withMessage("City cannot be empty"),
-  body("role").isString().trim().notEmpty().withMessage("Role cannot be empty"),
-  body("salary")
+    .withMessage(""),
+  body("role", "Role cannot be empty").isString().trim().notEmpty(),
+  body("salary", "Salary cannot be empty")
     .isNumeric()
+    .withMessage("Salary must be a numeric value")
     .isLength({ min: 0, max: 100000 })
-    .notEmpty()
-    .withMessage("Salary cannot be empty"),
+    .notEmpty(),
   async (req, res) => {
     const { name, birthDate, gender, state, city, role, salary } = req.body;
     console.log(req.body);
 
-    //validando
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({
+        errors: errors.array({ onlyFirstError: true }),
+      });
     }
 
     await createEmployee({
@@ -93,13 +91,15 @@ app.post(
 
 app.delete(
   "/delete-employee/:id",
-  param("id").isString().trim().notEmpty().withMessage("Id cannot be empty"),
+  param("id", "Id cannot be empty").isString().trim().notEmpty(),
   async (req, res) => {
     console.log(req.params);
     //validando
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res
+        .status(400)
+        .json({ errors: errors.array({ onlyFirstError: true }) });
     }
 
     res.send(await deleteEmployee(req.params.id));
@@ -108,24 +108,12 @@ app.delete(
 
 app.put(
   "/put-employee",
-  body("name").isString().trim().notEmpty().withMessage("Name cannot be empty"),
-  body("gender")
-    .isString()
-    .trim()
-    .notEmpty()
-    .withMessage("Gender cannot be empty"),
-  body("state")
-    .isString()
-    .trim()
-    .notEmpty()
-    .withMessage("State cannot be empty"),
-  body("city").isString().trim().notEmpty().withMessage("City cannot be empty"),
-  body("role").isString().trim().notEmpty().withMessage("role cannot be empty"),
-  body("salary")
-    .isNumeric()
-    .trim()
-    .notEmpty()
-    .withMessage("Salary cannot be empty"),
+  body("name", "Name cannot be empty").isString().trim().notEmpty(),
+  body("gender", "Gender cannot be empty").isString().trim().notEmpty(),
+  body("state", "State cannot be empty").isString().trim().notEmpty(),
+  body("city", "City cannot be empty").isString().trim().notEmpty(),
+  body("role", "role cannot be empty").isString().trim().notEmpty(),
+  body("salary", "Salary cannot be empty").isNumeric().trim().notEmpty(),
   async (req, res) => {
     console.log(req.body);
 
@@ -133,7 +121,9 @@ app.put(
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res
+        .status(400)
+        .json({ errors: errors.array({ onlyFirstError: true }) });
     }
 
     res.send(await updateEmployee(req.body));
